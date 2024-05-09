@@ -1,0 +1,14 @@
+services:
+  mysql:
+    image: bitnami/mysql
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      - MYSQL_USER=ximeen
+      - MYSQL_PASSWORD=583452
+      - MYSQL_DATABASE=investiments
+      - MYSQL_ROOT_PASSWORD=admin
+    volumes:
+      - "./conf.d:/etc/mysql/conf.d:ro"
