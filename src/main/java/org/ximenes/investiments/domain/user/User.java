@@ -1,4 +1,4 @@
-package org.ximenes.investiments.domain.User;
+package org.ximenes.investiments.domain.user;
 
 
 import jakarta.persistence.*;
@@ -17,6 +17,7 @@ public class User {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID userId;
     private String username;
+    @Column(unique = true)
     private String email;
     private String password;
     @CreationTimestamp

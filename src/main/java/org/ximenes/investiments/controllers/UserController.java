@@ -1,22 +1,51 @@
 package org.ximenes.investiments.controllers;
 
 
+import lombok.Data;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.ximenes.investiments.dto.CreateUserDTO;
-import org.ximenes.investiments.domain.User.User;
+import org.ximenes.investiments.dto.user.CreateUserDTO;
+import org.ximenes.investiments.domain.user.User;
+import org.ximenes.investiments.dto.user.UpdateUserDTO;
+import org.ximenes.investiments.dto.user.UserResponseDTO;
+import org.ximenes.investiments.service.UserService;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
+@Data
 public class UserController {
+    private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody CreateUserDTO body){
-        return null;
+    public ResponseEntity<UserResponseDTO> create(@RequestBody CreateUserDTO body){
+        return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDTO(this.userService.create(body)));
     }
 
     @GetMapping("{id}")
     public ResponseEntity<User> findUserById(@PathVariable String id){
-        return null;
+        User user = this.userService.getUserById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<User>> listUsers(){
+        List<User> users = this.userService.listUsers();
+        return ResponseEntity.status(HttpStatus.OK).body(users);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody UpdateUserDTO body){
+        this.userService.updateUserById(id, body);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable String id){
+        this.userService.deleteUserById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
