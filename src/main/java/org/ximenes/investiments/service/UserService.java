@@ -7,8 +7,9 @@ import org.ximenes.investiments.domain.user.exception.UserAlreadyExistsException
 import org.ximenes.investiments.domain.user.exception.UserNotFoundException;
 import org.ximenes.investiments.dto.user.CreateUserDTO;
 import org.ximenes.investiments.dto.user.UpdateUserDTO;
-import org.ximenes.investiments.repository.UserReposity;
+import org.ximenes.investiments.repository.UserRepository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,13 +18,14 @@ import java.util.UUID;
 @Data
 public class UserService {
 
-    private final UserReposity userReposity;
+    private final UserRepository userReposity;
 
     public UUID create(CreateUserDTO body){
         Optional<User> user = this.userReposity.findByEmail(body.email());
         if (user.isPresent()) throw new UserAlreadyExistsException("User already exists.");
 
         User newUser = new User();
+            newUser.setUserId(UUID.randomUUID());
             newUser.setUsername(body.username());
             newUser.setEmail(body.email());
             newUser.setPassword(body.password());
