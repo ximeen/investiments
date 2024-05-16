@@ -5,14 +5,11 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.ximenes.investiments.dto.user.CreateUserDTO;
+import org.ximenes.investiments.dto.user.*;
 import org.ximenes.investiments.domain.user.User;
-import org.ximenes.investiments.dto.user.UpdateUserDTO;
-import org.ximenes.investiments.dto.user.UserResponseDTO;
 import org.ximenes.investiments.service.UserService;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -48,4 +45,18 @@ public class UserController {
         this.userService.deleteUserById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @PostMapping("/{id}/accounts")
+    public ResponseEntity<Void> createUserAccount(@PathVariable String id, @RequestBody CreateAccountDTO body){
+        userService.createAccount(id, body);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+
+    }
+
+    @GetMapping("/{id}/accounts")
+    public ResponseEntity<List<AccountResponseDTO>> listAccounts(@PathVariable String id){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.listAccount(id));
+
+    }
+
 }

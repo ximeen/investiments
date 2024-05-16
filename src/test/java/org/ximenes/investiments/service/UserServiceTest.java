@@ -69,7 +69,6 @@ class UserServiceTest {
             );
             assertThrows(RuntimeException.class, ()-> userService.create(input));
         }
-
     }
 
     @Nested
