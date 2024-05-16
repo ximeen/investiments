@@ -1,4 +1,4 @@
 package org.ximenes.investiments.dto.general;
 
-public record ErrorResponseDTO(String errorMessage) {
+public record ErrorResponseDTO(String message) {
 }
