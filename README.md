@@ -20,5 +20,10 @@ O Scalar é muito interessante da para importar dados exportados da api pela ope
 [Documentação de rotas da API](https://investiments.apidocumentation.com/reference#tag/default/post/localhost:8080/users)
 
 
+### Exemplos
+Esse é um exemplo de uma consulta nessa api, com a quantidade de ações que essa conta tem, e o valor total gasto nas ações
+detalhe que esse valor total é com base na bolsa de valores atráves da API publica da [brapi](https://brapi.dev/).
+![img.png](img.png)
     
+ 
 
