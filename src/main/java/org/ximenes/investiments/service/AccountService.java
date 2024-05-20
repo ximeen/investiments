@@ -1,7 +1,9 @@
 package org.ximenes.investiments.service;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.ximenes.investiments.client.BrapiClient;
 import org.ximenes.investiments.domain.account.Account;
 import org.ximenes.investiments.domain.accountStock.AccountStock;
 import org.ximenes.investiments.domain.accountStock.AccountStockId;
@@ -20,9 +22,12 @@ import java.util.UUID;
 
 @Service @Data
 public class AccountService {
+    @Value("#{environment.TOKEN}")
+    private String TOKEN;
     private final AccountRepository accountRepository;
     private final StockRepository stockRepository;
     private final AccountStockRepository accountStockRepository;
+    private final BrapiClient brapiClient;
 
     public void associateStock(String id, AssociateAccountStockDTO body) {
         Account account = this.accountRepository.findById(UUID.fromString(id)).orElseThrow(() -> new AccountNotFoundException("Account not found."));
@@ -45,6 +50,12 @@ public class AccountService {
         Account account = this.accountRepository.findById(UUID.fromString(id)).orElseThrow(() -> new AccountNotFoundException("Account not found."));
         return account.getAccountStockList()
                 .stream()
-                .map(as -> new AccountStockResponstoDTO(as.getStock().getStockId(), as.getQuantity(), 0.0)).toList();
+                .map(as -> new AccountStockResponstoDTO(as.getStock().getStockId(), as.getQuantity(), getTotal(as.getQuantity(), as.getStock().getStockId()))).toList();
+    }
+
+    private double getTotal(Integer quantity, String stockId) {
+        var response = brapiClient.getQuote(TOKEN, stockId);
+        var price = response.results().getFirst().regularMarketPrice();
+        return quantity * price;
     }
 }
